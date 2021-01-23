@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Elevator</title>
+    <style>
+        #center {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        #batiment {
+            width: 52px;
+            height: 260px;
+            border: 2px solid black;
+        }
+        .etage {
+            width: 50px;
+            height: 50px;
+            border: 1px solid gray;
+        }
+        #command {
+            margin-top: 20px;
+        }
+        .elevator {
+            background-color: cornflowerblue;
+        }
+        #command input {
+            width: 25px;
+            height: 25px;
+            padding: 5px;
+            color: white;
+            background-color: gray;
+            border: none;
+        }
+        #command .active {
+            background-color: green;
+        }
+    </style>
+</head>
+<body>
+    <div id="center">
+        <h1>ELEVATOR BATIMENT</h1>
+        <div id="batiment">
+            <div class="etage" id="5"></div>
+            <div class="etage" id="4"></div>
+            <div class="etage" id="3"></div>
+            <div class="etage" id="2"></div>
+            <div class="etage elevator" id="1"></div>
+        </div>
+        <div id="command">
+            <input type="button" class="active" value="1">
+            <input type="button" value="2">
+            <input type="button" value="3">
+            <input type="button" value="4">
+            <input type="button" value="5">
+        </div>
+    </div>
+</body>
+</html>
