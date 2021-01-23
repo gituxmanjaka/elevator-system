@@ -27,9 +27,9 @@
         .elevator {
             background-color: cornflowerblue;
         }
-        #command input {
-            width: 25px;
-            height: 25px;
+        #command .command-btn {
+            width: 30px;
+            height: 30px;
             padding: 5px;
             color: white;
             background-color: gray;
@@ -51,12 +51,13 @@
             <div class="etage elevator" id="1"></div>
         </div>
         <div id="command">
-            <input type="button" class="active" value="1">
-            <input type="button" value="2">
-            <input type="button" value="3">
-            <input type="button" value="4">
-            <input type="button" value="5">
+            <input type="button" class="command-btn active" value="1">
+            <input type="button" class="command-btn" value="2">
+            <input type="button" class="command-btn" value="3">
+            <input type="button" class="command-btn" value="4">
+            <input type="button" class="command-btn" value="5">
         </div>
     </div>
+    <script src="app.js"></script>
 </body>
 </html>
