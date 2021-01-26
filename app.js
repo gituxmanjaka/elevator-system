@@ -1,77 +1,86 @@
-const btnCommands = document.querySelectorAll('.command-btn');
+const commands = document.querySelectorAll('.command-btn');
 const floors = document.querySelectorAll(".floor");
-const FOORS_LENGTH = floors.length;
+const FLOORS_LENGTH = floors.length;
+const ELEVATOR_SPEED = 650;
 
-for (let i=0; i<btnCommands.length; i++) {
-    btnCommands[i].addEventListener('click', function(e) {
+for (let i=0; i<commands.length; i++) {
+    commands[i].addEventListener('click', function(e) {
         e.preventDefault();
 
-        /* Pour pouvoir monter et descendre, on doit:
-              - Enlever la classe elevator de la position actuelle et
-              l'ajouter à celle de suivante.
-              - Pareil pour la classe "active" de button (command)
-            La seule difference entre monter et descendre, c'est le sens de destination
-            représenté par le signe "+" et (-)
-        */
-        function upElevator(position, elevator, commandSelected){
+        // Current position of the elevator 
+        const elevator = document.querySelector('.floor.elevator');
+        let elevatorPosition = parseInt(elevator.id);
+        // The button we pressed, i.e. the destination we want to go to 
+        const destination = this;
+        let destPosition = parseInt(destination.value);
+
+        // tPosition: temporary position, initialized by the position of the elevator and
+        // change value at each increment 
+        let tPosition = elevatorPosition;
+
+        // interval id (JS)
+        let move = null;
+
+        // We do nothing if we press the button whose elevator is currently there
+        if(elevatorPosition === destPosition ) {
+            return false;
+        }
+
+        if (elevatorPosition < destPosition) {
+            // setInterval : serve the loop
+            move = setInterval(() => moveElevator("up", destPosition), ELEVATOR_SPEED);
+        } else {
+            move = setInterval(() => moveElevator("down", destPosition), ELEVATOR_SPEED);
+        }
+
+        /*  To be able to go up and down, we must:
+               - Remove the "elevator" class from the current position and
+               add it to the next one.
+               - Same for the "active" class of button (command)
+            The only difference between going up and down is the direction of destination
+            represented by the sign "+" and (-)
+         */
+       let upElevator = (position, elevator, commandSelected) => {
             elevator.classList.remove("elevator");
-            for (let i = 0; i < FOORS_LENGTH; i++) {
+            for (let i = 0; i < FLOORS_LENGTH; i++) {
                 if(parseInt(floors[i].id) === position) {
                     floors[i-1].classList.add("elevator");
                 }
             }
             commandSelected.classList.remove("active");
-            for (let i = 0; i < FOORS_LENGTH; i++) {
-                if(parseInt(btnCommands[i].value) === position) {
-                    btnCommands[i+1].classList.add("active");
+            for (let i = 0; i < FLOORS_LENGTH; i++) {
+                if(parseInt(commands[i].value) === position) {
+                    commands[i+1].classList.add("active");
                 }
             }
         }
-        function downElevator(position, elevator, commandSelected){
+        let downElevator = (position, elevator, commandSelected) => {
             elevator.classList.remove("elevator");
-            for (let i = 0; i < FOORS_LENGTH; i++) {
+            for (let i = 0; i < FLOORS_LENGTH; i++) {
                 if(parseInt(floors[i].id) === position) {
                     floors[i+1].classList.add("elevator");
                 }
             }
             commandSelected.classList.remove("active");
-            for (let i = 0; i < FOORS_LENGTH; i++) {
-                if(parseInt(btnCommands[i].value) === position) {
-                    btnCommands[i-1].classList.add("active");
+            for (let i = 0; i < FLOORS_LENGTH; i++) {
+                if(parseInt(commands[i].value) === position) {
+                    commands[i-1].classList.add("active");
                 }
             }
         }
-
-        // Position courante de l'elevator
-        const elevator = document.querySelector('.floor.elevator');
-        let elevatorPosition = parseInt(elevator.id);
-        // Le bouton qu'on a appuyé, c-a-d, la destination où on veut aller
-        const destination = this;
-        let destPosition = parseInt(destination.value);
-
-        // On ne fait rien si on appui le bouton dont l'ascenseur se situe actuellement
-        if(elevatorPosition===destPosition) {
-            return false;
-        }
-
-        
-        if (elevatorPosition<destPosition) { 
-            /* On monte quand on est en bas
-            L'action doit se repéter jusqu'à la position voulue */
-            for (let i=elevatorPosition; i<destPosition; i++) {
-                let tElevator = document.querySelector('.floor.elevator');
-                let tCommandSelected = document.querySelector('.command-btn.active');
-                upElevator(i, tElevator, tCommandSelected);
-                alert("pause");
+        let moveElevator = (direction, dest) => {
+            let tElevator = document.querySelector('.floor.elevator');
+            let tCommandSelected = document.querySelector('.command-btn.active');
+            if (tPosition == dest){
+                clearInterval(move);
+                return
             }
-        } else {
-            /* On descend quand on est en haut
-            L'action doit se repéter jusqu'à la position voulue*/
-            for (let i=elevatorPosition; i>destPosition; i--) {
-                let tElevator = document.querySelector('.etage.elevator');
-                let tCommandSelected = document.querySelector('.command-btn.active')
-                downElevator(i, tElevator, tCommandSelected);
-                alert("pause");
+            if (direction === 'up') {
+                upElevator(tPosition, tElevator, tCommandSelected);
+                tPosition++;
+            } else {
+                downElevator(tPosition, tElevator, tCommandSelected);
+                tPosition--;
             }
         }
     });
